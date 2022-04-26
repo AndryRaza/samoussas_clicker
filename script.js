@@ -1,7 +1,7 @@
 /* Init */
 window.onload = initRender;
 
-let score = 0;
+let score = 40;
 let level = 1;
 
 let autoclick = new Item("Autoclick", 1,  50, 1, true);
@@ -15,6 +15,7 @@ let arrItems = [autoclick, chinois, indien];
 //let intervalCoreGameInterface = setInterval(checkScore,10)
 
 /* DOM */
+
 let scoreDOM = document.getElementById('score');
 let samoussaDOM = document.getElementById('samoussa');
 let listitemDOM = document.getElementById('list-item');
@@ -42,7 +43,7 @@ function renderInterfaceItems() {
                 <li class="list-group-item d-flex justify-content-between">
                     <p class="my-auto">${item.name}</p>
                     <div class="d-flex">
-                        <p class="my-auto mx-3">${item.count} samoussas</p>
+                        <p class="my-auto mx-3" id="${"price-"+ item.name}">${item.price} samoussas</p>
                         <button class="btn btn-success" id="${item.name}" onclick="upLevel(this);" >Niveau ${item.level}</button>
                     </div>
                 </li>
@@ -66,9 +67,18 @@ function addSamoussas() {
 }
 
 function upLevel(item){
+
     let item_ = arrItems.find(e=> e.name == item.id)
-    item_.level ++;
-    item.innerText = "Niveau " +item_.level;
+    if(score >= (item_.price * item_.level))
+    {
+        score -= item_.price*item_.level;   //On déduit le nbre de samoussas de l'achat du niveau
+        renderScore();  //On le réaffiche
+        item_.level ++; //On up l'item acheté
+        item.innerText = "Niveau " +item_.level; //On met à jour le rendu btn niveau
+        item_.price *= item_.level; //On met à jour le nouveau prix 
+        document.getElementById('price-'+item_.name).innerText = item_.price + " samoussas"; //On met à jour le rendu du prix
+    }
+
 }
 
 function checkScore(){
@@ -78,3 +88,4 @@ function checkScore(){
         renderInterfaceItems();
     }
 }
+
