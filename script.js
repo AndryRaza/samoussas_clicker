@@ -11,6 +11,7 @@ let indien = new Item("Indien", 1000, 3000, 0, false,1000);
 
 let arrItems = [autoclick, chinois, indien];
 
+let unlockrenderitem = [];
 
 let intervalCoreGameInterface = setInterval(checkScore,10)
 
@@ -31,13 +32,13 @@ function initRender() {
 }
 
 function renderScore() {
-    scoreDOM.innerText = score;
+    scoreDOM.innerText =  score;
 }
 
 function renderInterfaceItems() {
-
+    listitemDOM.innerHTML = null;
     arrItems.map(item=>{
-        if(item.unlock){
+        if(item.unlock ){
             listitemDOM.innerHTML += 
             `
                 <li class="list-group-item d-flex justify-content-between">
@@ -64,6 +65,8 @@ function Item(name, count, price, level, unlock,scale) {
 }
 
 /* Functions Game */
+
+//When u clik on the samoussa
 function addSamoussas() {
     score++;
     renderScore();
@@ -91,6 +94,16 @@ function checkScore(){
         autoclick.unlock = true;
         renderInterfaceItems();
     }
+    if(score >= 60 && !chinois.unlock)
+    {
+        chinois.unlock = true;
+        renderInterfaceItems();
+    }
+    if(score >= 700 && !indien.unlock)
+    {
+        indien.unlock = true;
+        renderInterfaceItems();
+    }
 }
 
 function workingitems(item){
@@ -98,6 +111,11 @@ function workingitems(item){
         case "Autoclick":
             let intervalAC = setInterval(()=>{score += autoclick.count,renderScore()},1000);
             break;
+        case "Chinois":
+            let intervalChinois = setInterval(()=>{score += chinois.count;renderScore()},1000);
+            break;
+        case "Indien":
+            let intervalIndien = setInterval(()=>{score += indien.count;renderScore()},1000);
         default:
             console.log('err working item autoclick');
             break;
